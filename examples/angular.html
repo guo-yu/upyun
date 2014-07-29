@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+  <meta charset="UTF-8">
+  <title>upyun form uploader</title>
+  <script src="../src/upyun.js"></script>
+  <script src="../bower_components/angular/angular.min.js"></script>
+  <script src="../bower_components/angular-base64/angular-base64.min.js"></script>
+  <script src="../bower_components/angular-md5/angular-md5.min.js"></script>
+</head>
+<body>
+  <div class="wrapper">
+    <h2>Angular.js example:</h2>
+    <form name="uploadForm" role="form" ng-controller="uploader">
+      <input type="file" name="file">
+      <button type="submit">upload now</button>
+    </form>
+  </div>
+  <script>
+    var app = angular.module('app', ['upyun']);
+    app.controller('uploader', ['$upyun', function($upyun){
+      console.log($upyun);
+      $upyun.set('bucket','mybucket');
+      $upyun.set('form_api_secret', 'xxxxxxxxxxx');
+      // bind upload form
+      $upyun.upload('uploadForm', function(err, response, image){
+        console.log(image);
+        console.log(response);
+      });
+    }])
+  </script>
+</body>
+</html>

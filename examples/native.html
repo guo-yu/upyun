@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>upyun form uploader</title>
+  <script src="../src/upyun.js"></script>
+</head>
+<body>
+  <div class="wrapper">
+    <h2>Native js example:</h2>
+    <form name="uploadForm" role="form">
+      <input type="file" name="file">
+      <button type="submit">upload now</button>
+    </form>
+  </div>
+  <script>
+    console.log(upyun);
+    upyun.set('bucket','mybucket');
+    upyun.set('form_api_secret', 'xxxxxxxxxxx');
+    // bind upload form
+    upyun.upload('uploadForm', function(err, response, image){
+      console.log(image);
+      console.log(response);
+    });
+  </script>
+</body>
+</html>
