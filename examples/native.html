@@ -3,6 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <title>upyun form uploader</title>
+  <script src="../bower_components/base64/base64.min.js"></script>
+  <script src="../bower_components/js-md5/js/md5.min.js"></script>
+  <script>
+    // make sure you have `bower install base64` installed
+    // make sure you have `bower install js-md5` installed
+    window.base64 = {};
+    window.base64.encode = window.btoa;
+    window.base64.decode = window.atob;
+  </script>
   <script src="../src/upyun.js"></script>
 </head>
 <body>

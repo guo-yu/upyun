@@ -7,7 +7,7 @@
     "example": "examples"
   },
   "scripts": {
-    "serve": "./node_modules/.bin/serve ./examples",
+    "serve": "./node_modules/.bin/serve .",
     "dev": "npm run serve",
     "start": "npm run dev",
     "example": "open examples/native.html"

@@ -10,7 +10,7 @@
   var base64, md5;
 
   // inject to window object
-  if (!angular) {
+  if (angular) {
     return angular.module('upyun', [
       'base64',
       'angular-md5'
