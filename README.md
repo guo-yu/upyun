@@ -1,6 +1,6 @@
 ## upyun 
 
-a pure front-end upyun form upload see service, supports both native js and angular.js
+a pure front-end upyun form upload service, supports both native js and angular.js
 
 ### Installation
 ````
@@ -50,6 +50,7 @@ install all deps:
 $ git clone https://github.com/turingou/upyun.git
 $ cd upyun
 $ bower install 
+$ npm install
 $ npm run dev
 ```
 

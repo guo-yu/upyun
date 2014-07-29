@@ -4,7 +4,7 @@
   "authors": [
     "turing <o.u.turing@gmail.com>"
   ],
-  "description": "a pure front-end upyun form upload see service, supports both native js and angular.js",
+  "description": "a pure front-end upyun form upload service, supports both native js and angular.js",
   "main": "src/upyun.js",
   "keywords": [
     "upyun",
