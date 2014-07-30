@@ -20,8 +20,10 @@
     </form>
   </div>
   <script>
-    upyun.set('bucket','airpub');
-    upyun.set('form_api_secret', 'OivTycIqqYLBX1EiOHwPSwyHlI4=');
+    // just for demo !!!
+    // this bucket has a upload limit
+    upyun.set('bucket','upyun-form');
+    upyun.set('form_api_secret', 'IRoTyNc75husfQD24cq0bNmRSDI=');
     // track uploading progress
     upyun.on('uploading', function(progress) {
       console.log('上传进度 ' + progress + '%');

@@ -23,8 +23,10 @@
     var app = angular.module('app', ['upyun']);
     app.controller('uploader', ['$upyun', function($upyun){
       $scope.uploadText = 'Upload';
-      $upyun.set('bucket','mybucket');
-      $upyun.set('form_api_secret', 'xxxxxxxxxxx');
+      // just for demo !!!
+      // this bucket has a upload limit
+      $upyun.set('bucket','upyun-form');
+      $upyun.set('form_api_secret', 'IRoTyNc75husfQD24cq0bNmRSDI=');
       // track uploading progress
       $upyun.on('uploading', function(progress) {
         console.log('上传进度 ' + progress + '%');
