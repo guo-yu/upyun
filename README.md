@@ -8,7 +8,20 @@ $ bower install upyun --save
 ````
 
 ### Example
-Use as a angular module:
+
+See more exmaples in `./examples` dir.
+
+#### Use as angular module
+
+html parts:
+```html
+<form name="uploadForm" role="form" ng-controller="uploader">
+  <input type="file" name="file">
+  <a ng-click="upload()">Upload</a>
+</form>
+```
+
+javascript parts:
 ```javascript
 var app = angular.module('myApp',['upyun']);
 
@@ -18,30 +31,37 @@ app.controller('upload', function($scope, $upyun) {
   // config upyun instance the very first
   $upyun.set('bucket','mybucket');
   $upyun.set('form_api_secret', 'xxxxxxxxxxx');
-
+  
   // uploadForm is the form's name `form(name="uploadForm")`
-  $upyun.upload('uploadForm', function(err, response){
-    if (err) return console.error(err);
-    console.log(response);
-  });
-});
-
-// custom bind file
-app.controller('uploadByFile', function($scope, $upyun) {
-  $upyun.upload(fileInstance, function(err, response){
-    if (err) return console.error(err);
-    console.log(response);
-  });
+  $scope.upload = function() {
+    $upyun.upload('uploadForm', function(err, response){
+      if (err) return console.error(err);
+      console.log(response);
+    });
+  }
 });
 ```
 
-Use as `window.upyun`, make sure `window.md5` and `window.base64` exist.
+#### Use as `window.upyun`
+
+make sure `window.md5` and `window.Base64` exist.
+
+html parts:
+```html
+<form name="uploadForm" role="form">
+  <input type="file" name="file">
+  <a class="submit" onclick="upload();">Upload</a>
+</form>
+```
+javascript parts:
 ```javascript
-upyun('uploadForm', function(err, response){
-    if (err) return console.error(err);
-    console.log(response);
+function upload() {
+  upyun('uploadForm', function(err, response){
+      if (err) return console.error(err);
+      console.log(response);
+    });
   });
-});
+}
 ```
 
 ### Development
