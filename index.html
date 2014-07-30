@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>又拍云表单上传工具 | upyun form uploader</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- make sure you have `bower install js-base64` installed -->
+  <script src="bower_components/js-base64/base64.min.js"></script>
+  <!-- make sure you have `bower install js-md5` installed -->
+  <script src="bower_components/js-md5/js/md5.min.js"></script>
+  <script src="https://raw.githubusercontent.com/turingou/upyun/master/src/upyun.js"></script>
+</head>
+<body>
+  <div class="wrapper">
+    <h2>又拍云表单上传演示 <span>Native javascript</span></h2>
+    <div id="preview" class="preview"></div>
+    <form name="uploadForm" role="form">
+      <input type="file" name="file">
+      <a class="submit" id="submitToUpyun" onclick="upload();">Upload</a>
+    </form>
+  </div>
+  <script>
+    // just for demo !!!
+    // this bucket has a upload limit
+    upyun.set('bucket','upyun-form');
+    upyun.set('form_api_secret', 'IRoTyNc75husfQD24cq0bNmRSDI=');
+    // track uploading progress
+    upyun.on('uploading', function(progress) {
+      console.log('上传进度 ' + progress + '%');
+      document.getElementById('submitToUpyun').innerText = 
+        progress === 100 ?
+        '上传完成' :
+        '上传进度 ' + progress + '%';
+    });
+    // upload method
+    function upload() {
+      console.log('正在开始上传...');
+      upyun.upload('uploadForm', function(err, response, image){
+        if (err) console.error(err);
+        console.log('返回信息：');
+        console.log(response);
+        console.log('图片信息：');
+        console.log(image);
+        if (image.code === 200 && image.message === 'ok') {
+          document.getElementById('preview').innerHTML = [
+            '<img alt="" src="',
+              image.absUrl,
+            '" />'
+          ].join('\n');
+        }
+      });
+      return false;
+    }
+  </script>
+</body>
+</html>

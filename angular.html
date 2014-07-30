@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+  <meta charset="UTF-8">
+  <title>又拍云表单上传工具 | upyun form uploader</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="bower_components/angular/angular.min.js"></script>
+  <script src="bower_components/angular-base64/angular-base64.min.js"></script>
+  <script src="bower_components/angular-md5/angular-md5.min.js"></script>
+  <script src="https://raw.githubusercontent.com/turingou/upyun/master/src/upyun.js"></script>
+</head>
+<body>
+  <div class="wrapper" ng-controller="uploader">
+    <h2>又拍云表单上传演示 <span>Angular.js</span></h2>
+    <div id="preview" class="preview">
+      <img ng-src="{{image.url}}" alt="" ng-show="image.ready">
+    </div>
+    <form name="uploadForm" role="form">
+      <input type="file" name="file">
+      <a class="submit" ng-click="upload()" ng-bind="uploadText"></a>
+    </form>
+  </div>
+  <script>
+    var app = angular.module('app', ['upyun']);
+    app.controller('uploader', function($scope, $upyun) {
+      $scope.uploadText = 'Upload';
+      // just for demo !!!
+      // this bucket has a upload limit
+      $upyun.set('bucket','upyun-form');
+      $upyun.set('form_api_secret', 'IRoTyNc75husfQD24cq0bNmRSDI=');
+      // track uploading progress
+      $upyun.on('uploading', function(progress) {
+        console.log('上传进度 ' + progress + '%');
+        $scope.uploadText = 
+          progress === 100 ?
+          '上传完成' :
+          '上传进度 ' + progress + '%';
+        $scope.$apply();
+      });
+      // bind upload form
+      $scope.upload = function() {
+        console.log('正在开始上传...');
+        $upyun.upload('uploadForm', function(err, response, image){
+          if (err) console.error(err);
+          console.log('返回信息：');
+          console.log(response);
+          console.log('图片信息：');
+          console.log(image);
+          if (image.code === 200 && image.message === 'ok') {
+            $scope.image = {};
+            $scope.image.ready = true;
+            $scope.image.url = image.absUrl;
+          }
+          $scope.$apply();
+        });
+      }
+    });
+  </script>
+</body>
+</html>
