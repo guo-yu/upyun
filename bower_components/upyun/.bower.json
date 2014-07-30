@@ -1,0 +1,43 @@
+{
+  "name": "upyun",
+  "authors": [
+    "turing <o.u.turing@gmail.com>"
+  ],
+  "description": "a pure front-end upyun form upload service, supports both native js and angular.js",
+  "main": "src/upyun.js",
+  "keywords": [
+    "upyun",
+    "angular.js",
+    "angular",
+    "upload"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/turingou/upyun",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "package.json"
+  ],
+  "dependencies": {
+    "angular": "*",
+    "angular-base64": "~2.0.2",
+    "angular-md5": "~0.1.7"
+  },
+  "devDependencies": {
+    "js-base64": "2.1.5",
+    "js-md5": "1.1.0"
+  },
+  "_release": "f7ff01f51b",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "f7ff01f51b5f503b3187a0c4fc81dbf5599be579"
+  },
+  "_source": "https://github.com/turingou/upyun.git",
+  "_target": "*",
+  "_originalSource": "upyun",
+  "_direct": true
+}
