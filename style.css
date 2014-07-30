@@ -14,7 +14,7 @@ html {
 }
 
 .wrapper {
-  background: #fff url(https://www.upyun.com/images/upyun_logo.png) no-repeat center 20px;
+  background: #fff url('./upyun_logo.png') no-repeat center 20px;
   width: 500px;
   margin-left: auto;
   margin-right: auto;
