@@ -13,6 +13,8 @@ $ npm install upyun-form --save
 
 ### Example
 
+Check out online upload demo on github.io [Native version](http://turingou.github.io/upyun/), [Angular.js version](http://turingou.github.io/upyun/angular.html)
+
 See more exmaples in `./examples` dir, or `$ npm run example` instead.
 
 #### Use as angular module
