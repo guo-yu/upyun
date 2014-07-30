@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <title>又拍云表单上传工具 | upyun form uploader</title>
-  <script src="../src/upyun.js"></script>
+  <link rel="stylesheet" href="./style.css">
   <script src="../bower_components/angular/angular.min.js"></script>
   <script src="../bower_components/angular-base64/angular-base64.min.js"></script>
   <script src="../bower_components/angular-md5/angular-md5.min.js"></script>
+  <script src="../src/upyun.js"></script>
 </head>
 <body>
   <div class="wrapper" ng-controller="uploader">
@@ -16,12 +17,12 @@
     </div>
     <form name="uploadForm" role="form">
       <input type="file" name="file">
-      <a href="javascrip:void(0);" ng-click="upload()" ng-bind="uploadText"></a>
+      <a class="submit" ng-click="upload()" ng-bind="uploadText"></a>
     </form>
   </div>
   <script>
     var app = angular.module('app', ['upyun']);
-    app.controller('uploader', ['$upyun', function($upyun){
+    app.controller('uploader', function($scope, $upyun) {
       $scope.uploadText = 'Upload';
       // just for demo !!!
       // this bucket has a upload limit
@@ -34,6 +35,7 @@
           progress === 100 ?
           '上传完成' :
           '上传进度 ' + progress + '%';
+        $scope.$apply();
       });
       // bind upload form
       $scope.upload = function() {
@@ -52,7 +54,7 @@
           $scope.$apply();
         });
       }
-    }])
+    });
   </script>
 </body>
 </html>

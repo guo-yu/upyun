@@ -3,13 +3,17 @@
 a pure front-end upyun form upload service, supports both native js and angular.js
 
 ### Installation
-````
+```
 $ bower install upyun --save
-````
+```
+if you want to use NPM instead of bower, just
+```
+$ npm install upyun-form --save
+```
 
 ### Example
 
-See more exmaples in `./examples` dir.
+See more exmaples in `./examples` dir, or `$ npm run example` instead.
 
 #### Use as angular module
 
@@ -34,9 +38,10 @@ app.controller('upload', function($scope, $upyun) {
   
   // uploadForm is the form's name `form(name="uploadForm")`
   $scope.upload = function() {
-    $upyun.upload('uploadForm', function(err, response){
+    $upyun.upload('uploadForm', function(err, response, image){
       if (err) return console.error(err);
       console.log(response);
+      console.log(image);
     });
   }
 });
@@ -56,16 +61,18 @@ html parts:
 javascript parts:
 ```javascript
 function upload() {
-  upyun('uploadForm', function(err, response){
+  upyun('uploadForm', function(err, response, image){
       if (err) return console.error(err);
       console.log(response);
+      console.log(image);
     });
   });
 }
 ```
 
 ### Development
-install all deps:
+
+install all devDependencies and run a static file serve server:
 ```
 $ git clone https://github.com/turingou/upyun.git
 $ cd upyun

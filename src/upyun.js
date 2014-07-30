@@ -30,7 +30,7 @@
     this.configs = {};
     this.configs.expiration = (new Date().getTime()) + 60;
     this.configs['save-key'] = '/{year}/{mon}/{day}/upload_{filename}{.suffix}';
-    this.configs['allow-file-type'] = 'jpg,gif,png';
+    this.configs['allow-file-type'] = 'jpg,jpeg,gif,png';
   }
 
   Upyun.prototype.set = function(k, v) {
