@@ -2,35 +2,32 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>upyun form uploader</title>
-  <script src="../bower_components/base64/base64.min.js"></script>
+  <title>又拍云表单上传工具 | upyun form uploader</title>
+  <link rel="stylesheet" href="./style.css">
+  <!-- make sure you have `bower install js-base64` installed -->
+  <script src="../bower_components/js-base64/base64.min.js"></script>
+  <!-- make sure you have `bower install js-md5` installed -->
   <script src="../bower_components/js-md5/js/md5.min.js"></script>
-  <script>
-    // make sure you have `bower install base64` installed
-    // make sure you have `bower install js-md5` installed
-    window.base64 = {};
-    window.base64.encode = window.btoa;
-    window.base64.decode = window.atob;
-  </script>
   <script src="../src/upyun.js"></script>
 </head>
 <body>
   <div class="wrapper">
-    <h2>Native js example:</h2>
-    <form name="uploadForm" role="form">
+    <h2>又拍云表单上传演示 <span>Native javascript</span></h2>
+    <form name="uploadForm" role="form" onsubmit="upload()">
       <input type="file" name="file">
-      <button type="submit">upload now</button>
+      <button class="submit" type="submit">Upload</button>
     </form>
   </div>
   <script>
-    console.log(upyun);
     upyun.set('bucket','mybucket');
     upyun.set('form_api_secret', 'xxxxxxxxxxx');
-    // bind upload form
-    upyun.upload('uploadForm', function(err, response, image){
-      console.log(image);
-      console.log(response);
-    });
+    // upload method
+    function upload() {
+      upyun.upload('uploadForm', function(err, response, image){
+        console.log(image);
+        console.log(response);
+      });
+    }
   </script>
 </body>
 </html>

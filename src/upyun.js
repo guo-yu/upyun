@@ -1,4 +1,4 @@
-(function(window, angular) {
+;(function(window, angular) {
 
   'use strict';
 
@@ -7,29 +7,24 @@
   if (!window.FormData) throw new Error('FormData required.');
   if (!window.XMLHttpRequest) throw new Error('XMLHttpRequest required.');
 
-  var base64, md5;
-
-  // inject to window object
+  // inject as a angular module
   if (angular) {
-    return angular.module('upyun', [
+    angular.module('upyun', [
       'base64',
       'angular-md5'
-    ]).factory('$upyun', ['$base64', 'md5',
-      function(base64, md5) {
-        return new Upyun(base64, md5);
-      }
-    ]);
+    ]).factory('$upyun', function($base64, md5) {
+      return new Upyun($base64, md5);
+    });
   } else {
-    // inject as a angular module
-    window.upyun = new Upyun(window.base64, window.md5);
-    return window.upyun;
+    // inject to window object
+    window.upyun = new Upyun(window.Base64, window.md5);
   }
 
   function Upyun(base64, md5) {
     if (!base64) throw new Error('base64 required.');
-    if (!md5) throw new Error('base64 required.');
-    base64 = base64;
-    md5 = md5;
+    if (!md5) throw new Error('md5 required.');
+    this.base64 = base64;
+    this.md5 = md5;
     this.events = {};
     this.form_api_secret = '';
     this.configs = {};
@@ -39,8 +34,9 @@
   }
 
   Upyun.prototype.set = function(k, v) {
+    var toplevel = ['form_api_secret', 'endpoint'];
     if (k && v) {
-      if (k === 'form_api_secret' || k === 'endpoint') {
+      if (toplevel.indexOf(k) > -1) {
         this[k] = v;
       } else {
         this.configs[k] = v;
@@ -63,6 +59,7 @@
     var self = this;
     var req = new XMLHttpRequest();
     var uploadByForm = typeof(params) === 'string';
+    var md5hash = self.md5.createHash || self.md5;
 
     // if upload by form name,
     // all params must be input's value.
@@ -70,14 +67,14 @@
       new FormData(document.forms.namedItem(params)) :
       new FormData();
 
-    var policy = base64.encode(JSON.stringify(self.configs));
+    var policy = self.base64.encode(JSON.stringify(self.configs));
     var apiendpoint = self.endpoint || 'http://v0.api.upyun.com/' + self.configs.bucket;
 
     // by default, if not upload files by form,
     // file object will be parse as `params`
     if (!uploadByForm) data.append('file', file);
     data.append('policy', policy);
-    data.append('signature', md5.createHash(policy + '&' + self.form_api_secret));
+    data.append('signature', md5hash(policy + '&' + self.form_api_secret));
 
     // open request
     req.open('POST', apiendpoint, true);
@@ -110,7 +107,6 @@
 
     // send data to server 
     req.send(data);
-
-  }
+  };
 
 })(window, window.angular);
