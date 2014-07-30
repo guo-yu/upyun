@@ -34,7 +34,7 @@
   }
 
   Upyun.prototype.set = function(k, v) {
-    var toplevel = ['form_api_secret', 'endpoint'];
+    var toplevel = ['form_api_secret', 'endpoint', 'host'];
     if (k && v) {
       if (toplevel.indexOf(k) > -1) {
         this[k] = v;
@@ -47,7 +47,7 @@
 
   Upyun.prototype.on = function(event, callback) {
     if (event && callback) {
-      self.events[event] = callback;
+      this.events[event] = callback;
     }
     return this;
   };
@@ -69,6 +69,7 @@
 
     var policy = self.base64.encode(JSON.stringify(self.configs));
     var apiendpoint = self.endpoint || 'http://v0.api.upyun.com/' + self.configs.bucket;
+    var imageHost = self.host || 'http://' + self.configs.bucket + '.b0.upaiyun.com';
 
     // by default, if not upload files by form,
     // file object will be parse as `params`
@@ -91,7 +92,10 @@
       if (statusCode !== 200)
         return callback(new Error(result.target.status), result.target);
       try {
-        return callback(null, result.target, JSON.parse(this.responseText));
+        var image = JSON.parse(this.responseText);
+        image.absUrl = imageHost + image.url;
+        image.absUri = image.absUrl;
+        return callback(null, result.target, image);
       } catch (err) {
         return callback(err);
       }

@@ -41,6 +41,17 @@ h2 span {
   font-weight: normal;
 }
 
+.preview {
+  overflow: hidden;
+}
+
+.preview img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+}
+
 .submit {
   border: 1px solid #3498DB;
   background-color: #3498DB;
@@ -49,9 +60,9 @@ h2 span {
   cursor: pointer;
   display: block;
   margin-top: 30px;
-  width: 100%;
   font-weight: bold;
   font-size: 20px;
+  text-align: center;
 }
 
 .submit:hover {

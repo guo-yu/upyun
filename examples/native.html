@@ -13,20 +13,41 @@
 <body>
   <div class="wrapper">
     <h2>又拍云表单上传演示 <span>Native javascript</span></h2>
-    <form name="uploadForm" role="form" onsubmit="upload()">
+    <div id="preview" class="preview"></div>
+    <form name="uploadForm" role="form">
       <input type="file" name="file">
-      <button class="submit" type="submit">Upload</button>
+      <a class="submit" id="submitToUpyun" onclick="upload();">Upload</a>
     </form>
   </div>
   <script>
-    upyun.set('bucket','mybucket');
-    upyun.set('form_api_secret', 'xxxxxxxxxxx');
+    upyun.set('bucket','airpub');
+    upyun.set('form_api_secret', 'OivTycIqqYLBX1EiOHwPSwyHlI4=');
+    // track uploading progress
+    upyun.on('uploading', function(progress) {
+      console.log('上传进度 ' + progress + '%');
+      document.getElementById('submitToUpyun').innerText = 
+        progress === 100 ?
+        '上传完成' :
+        '上传进度 ' + progress + '%';
+    });
     // upload method
     function upload() {
+      console.log('正在开始上传...');
       upyun.upload('uploadForm', function(err, response, image){
-        console.log(image);
+        if (err) console.error(err);
+        console.log('返回信息：');
         console.log(response);
+        console.log('图片信息：');
+        console.log(image);
+        if (image.code === 200 && image.message === 'ok') {
+          document.getElementById('preview').innerHTML = [
+            '<img alt="" src="',
+              image.absUrl,
+            '" />'
+          ].join('\n');
+        }
       });
+      return false;
     }
   </script>
 </body>
