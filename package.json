@@ -1,6 +1,6 @@
 {
   "name": "upyun-form",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "a pure front-end upyun form upload service, supports both native js and angular.js",
   "main": "src/upyun.js",
   "directories": {

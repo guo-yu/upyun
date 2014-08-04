@@ -6,6 +6,7 @@
   if (!window.JSON) throw new Error('JSON required.');
   if (!window.FormData) throw new Error('FormData required.');
   if (!window.XMLHttpRequest) throw new Error('XMLHttpRequest required.');
+  var NProgressExist = NProgress && NProgress.start && NProgress.done;
 
   // inject as a angular module
   if (angular) {
@@ -87,6 +88,7 @@
 
     // when server response
     req.addEventListener('load', function(result) {
+      if (NProgressExist) NProgress.done();
       var statusCode = result.target.status;
       // trying to parse JSON
       if (statusCode !== 200)
@@ -111,6 +113,9 @@
 
     // send data to server 
     req.send(data);
+
+    // ui trigger
+    if (NProgressExist) NProgress.start();
   };
 
 })(window, window.angular);
