@@ -7,9 +7,10 @@
     "example": "examples"
   },
   "scripts": {
-    "serve": "./node_modules/.bin/serve .",
+    "serve": "node_modules/.bin/serve .",
     "dev": "npm run serve",
     "start": "npm run dev",
+    "build": "node_modules/.bin/uglifyjs src/upyun.js -o dist/upyun.min.js --source-map dist/upyun.min.js.map --source-map-url upyun.min.js.map",
     "example": "open examples/native.html"
   },
   "repository": {
@@ -31,6 +32,7 @@
   },
   "homepage": "https://github.com/turingou/upyun",
   "devDependencies": {
-    "serve": "~1.4.0"
+    "serve": "~1.4.0",
+    "uglify-js": "^2.4.15"
   }
 }
