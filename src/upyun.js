@@ -1,4 +1,4 @@
-;(function(window, angular) {
+;(function(window, angular, NProgress) {
 
   'use strict';
 
@@ -118,4 +118,4 @@
     if (NProgressExist) NProgress.start();
   };
 
-})(window, window.angular);
+})(window, window.angular, window.NProgress);
