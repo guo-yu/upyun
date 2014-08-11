@@ -74,7 +74,7 @@
 
     // by default, if not upload files by form,
     // file object will be parse as `params`
-    if (!uploadByForm) data.append('file', file);
+    if (!uploadByForm) data.append('file', params);
     data.append('policy', policy);
     data.append('signature', md5hash(policy + '&' + self.form_api_secret));
 
