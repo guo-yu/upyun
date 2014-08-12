@@ -1,4 +1,4 @@
-## upyun ![release](http://img.shields.io/github/release/turingou/upyun.svg)&nbsp;![npm](http://img.shields.io/npm/v/upyun-form.svg)
+## upyun ![release](http://img.shields.io/github/release/turingou/upyun.svg?style=flat)&nbsp;![npm](http://img.shields.io/npm/v/upyun-form.svg?style=flat)
 
 a pure front-end upyun form upload service, supports both native js and angular.js
 
