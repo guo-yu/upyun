@@ -1,17 +1,18 @@
 {
   "name": "upyun-form",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "a pure front-end upyun form upload service, supports both native js and angular.js",
   "main": "src/upyun.js",
   "directories": {
     "example": "examples"
   },
   "scripts": {
-    "serve": "node_modules/.bin/serve .",
-    "dev": "npm run serve",
-    "start": "npm run dev",
-    "build": "node_modules/.bin/uglifyjs src/upyun.js -o dist/upyun.min.js --source-map dist/upyun.min.js.map --source-map-url upyun.min.js.map",
-    "example": "open examples/native.html"
+    "serve": "node_modules/.bin/serve .",    
+    "watch": "node_modules/.bin/rewatch src/*.js -c 'npm run build'",
+    "build": "node_modules/.bin/uglifyjs src/upyun.js -o dist/upyun.min.js --source-map dist/upyun.min.js.map --source-map-url upyun.min.js.map --source-map-root ../src/upyun.js",
+    "example": "open examples/native.html",
+    "dev": "npm run serve & npm run watch",
+    "start": "npm run dev"
   },
   "repository": {
     "type": "git",
@@ -33,6 +34,7 @@
   "homepage": "https://github.com/turingou/upyun",
   "devDependencies": {
     "serve": "~1.4.0",
-    "uglify-js": "^2.4.15"
+    "uglify-js": "^2.4.15",
+    "rewatch": "~0.2.2"
   }
 }
