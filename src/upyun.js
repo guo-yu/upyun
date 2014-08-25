@@ -10,12 +10,9 @@
 
   // inject as a angular module
   if (angular) {
-    angular.module('upyun', [
-      'base64',
-      'angular-md5'
-    ]).factory('$upyun', function($base64, md5) {
-      return new Upyun($base64, md5);
-    });
+    angular
+      .module('upyun', ['base64','angular-md5'])
+      .service('$upyun', ['$base64', 'md5', Upyun])
   } else {
     // inject to window object
     window.upyun = new Upyun(window.Base64, window.md5);
