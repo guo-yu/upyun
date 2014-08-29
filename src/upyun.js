@@ -1,20 +1,14 @@
 ;(function(window, angular, NProgress) {
-
   'use strict';
-
-  // check outer deps
-  if (!window.JSON) throw new Error('JSON required.');
-  if (!window.FormData) throw new Error('FormData required.');
-  if (!window.XMLHttpRequest) throw new Error('XMLHttpRequest required.');
   var NProgressExist = NProgress && NProgress.start && NProgress.done;
 
-  // inject as a angular module
+  // Inject as a angular module
   if (angular) {
     angular
       .module('upyun', ['base64','angular-md5'])
       .service('$upyun', ['$base64', 'md5', Upyun])
   } else {
-    // inject to window object
+    // Inject to window object
     window.upyun = new Upyun(window.Base64, window.md5);
   }
 
@@ -51,6 +45,13 @@
   };
 
   Upyun.prototype.upload = function(params, callback) {
+    // Check dependencies when `upload` method are trigged.
+    if (!window.JSON) 
+      throw new Error('JSON required.');
+    if (!window.FormData) 
+      throw new Error('FormData required.');
+    if (!window.XMLHttpRequest) 
+      throw new Error('XMLHttpRequest required.');
     if (!callback || typeof(callback) !== 'function') 
       throw new Error('callback function required.');
 
