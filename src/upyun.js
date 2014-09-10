@@ -139,7 +139,7 @@
       form_api_secret: '',
       params: {
         expiration: (new Date().getTime()) + 60,
-        'save-key': '/{year}/{mon}/{day}/upload_{filemd5}{.suffix}';
+        'save-key': '/{year}/{mon}/{day}/upload_{filemd5}{.suffix}',
         'allow-file-type': 'jpg,jpeg,gif,png'
       }
     };

@@ -22,14 +22,19 @@
   </div>
   <script>
     var app = angular.module('app', ['upyun']);
-    app.controller('uploader', function($scope, $upyun) {
-      $scope.uploadText = 'Upload';
+    // configs upyun
+    app.config(['upyunProvider',function(upyunProvider) {
       // just for demo !!!
       // this bucket has a upload limit
-      $upyun.set('bucket','upyun-form');
-      $upyun.set('form_api_secret', 'IRoTyNc75husfQD24cq0bNmRSDI=');
+      upyunProvider.config({
+        form_api_secret: 'IRoTyNc75husfQD24cq0bNmRSDI=',
+        bucket: 'upyun-form'
+      });
+    }])
+    app.controller('uploader', function($scope, upyun) {
+      $scope.uploadText = 'Upload';      
       // track uploading progress
-      $upyun.on('uploading', function(progress) {
+      upyun.on('uploading', function(progress) {
         console.log('上传进度 ' + progress + '%');
         $scope.uploadText = 
           progress === 100 ?
@@ -40,7 +45,7 @@
       // bind upload form
       $scope.upload = function() {
         console.log('正在开始上传...');
-        $upyun.upload('uploadForm', function(err, response, image){
+        upyun.upload('uploadForm', function(err, response, image){
           if (err) console.error(err);
           console.log('返回信息：');
           console.log(response);

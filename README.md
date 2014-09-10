@@ -31,7 +31,7 @@ javascript parts:
 ```javascript
 var app = angular.module('myApp',['upyun']);
 
-// configs $upyun
+// configs upyun
 app.config(['upyunProvider',function(upyunProvider) {
   upyunProvider.config({
     form_api_secret: 'my_form_api_secret',
@@ -40,10 +40,10 @@ app.config(['upyunProvider',function(upyunProvider) {
 }])
 
 // bind from form, required params must be defined in the form
-app.controller('upload', function($scope, $upyun) {  
+app.controller('upload', function($scope, upyun) {  
   // uploadForm is the form's name `form(name="uploadForm")`
   $scope.upload = function() {
-    $upyun.upload('uploadForm', function(err, response, image){
+    upyun.upload('uploadForm', function(err, response, image){
       if (err) return console.error(err);
       console.log(response);
       console.log(image);
