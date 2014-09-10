@@ -35,19 +35,12 @@ var app = angular.module('myApp',['upyun']);
 app.config(['upyunProvider',function(upyunProvider) {
   upyunProvider.config({
     form_api_secret: 'my_form_api_secret',
-    params: {
-      bucket: 'mybucket'
-    }
+    bucket: 'mybucket'
   });
 }])
 
-// bind from form
-// required params must be defined in the form
-app.controller('upload', function($scope, $upyun) {
-  // config upyun instance the very first
-  $upyun.set('bucket','mybucket');
-  $upyun.set('form_api_secret', 'xxxxxxxxxxx');
-  
+// bind from form, required params must be defined in the form
+app.controller('upload', function($scope, $upyun) {  
   // uploadForm is the form's name `form(name="uploadForm")`
   $scope.upload = function() {
     $upyun.upload('uploadForm', function(err, response, image){

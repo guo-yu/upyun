@@ -120,8 +120,12 @@
     this.config = function(configs) {
       if (!configs || !angular.isObject(configs))
         return;
+      var toplevel = ['form_api_secret', 'endpoint', 'host'];
       angular.forEach(configs, function(v, k) {
-        self.configs[k] = v;
+        if (toplevel.indexOf(k) > -1) 
+          self.configs[k] = v;
+        else
+          self.configs.params[k] = v;
       });
       return this.configs;
     };
