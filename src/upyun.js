@@ -6,46 +6,44 @@
   if (angular) {
     angular
       .module('upyun', ['base64','angular-md5'])
-      .service('$upyun', ['$base64', 'md5', Upyun])
+      .constant('UPYUN_CONFIGS', initDefaultConfigs())
+      .provider('upyun', ['UPYUN_CONFIGS', UpyunProvider]);
   } else {
     // Inject to window object
     window.upyun = new Upyun(window.Base64, window.md5);
   }
 
-  function Upyun(base64, md5) {
-    if (!base64) throw new Error('base64 required.');
-    if (!md5) throw new Error('md5 required.');
+  function Upyun(base64, md5, self) {
+    var isAngularModule = self && self.configs;
     this.base64 = base64;
     this.md5 = md5;
     this.events = {};
-    this.form_api_secret = '';
-    this.configs = {};
-    this.configs.expiration = (new Date().getTime()) + 60;
-    this.configs['save-key'] = '/{year}/{mon}/{day}/upload_{filemd5}{.suffix}';
-    this.configs['allow-file-type'] = 'jpg,jpeg,gif,png';
+    this.configs = isAngularModule ? self.configs : initDefaultConfigs();
   }
 
   Upyun.prototype.set = function(k, v) {
     var toplevel = ['form_api_secret', 'endpoint', 'host'];
     if (k && v) {
-      if (toplevel.indexOf(k) > -1) {
-        this[k] = v;
-      } else {
+      if (toplevel.indexOf(k) > -1)
         this.configs[k] = v;
-      }
+      else
+        this.configs.params[k] = v;
     }
     return this;
   };
 
   Upyun.prototype.on = function(event, callback) {
-    if (event && callback) {
+    if (event && callback)
       this.events[event] = callback;
-    }
     return this;
   };
 
   Upyun.prototype.upload = function(params, callback) {
     // Check dependencies when `upload` method are trigged.
+    if (!this.base64) 
+      throw new Error('base64 required.');
+    if (!this.md5) 
+      throw new Error('md5 required.');
     if (!window.JSON) 
       throw new Error('JSON required.');
     if (!window.FormData) 
@@ -66,15 +64,15 @@
       new FormData(document.forms.namedItem(params)) :
       new FormData();
 
-    var policy = self.base64.encode(JSON.stringify(self.configs));
-    var apiendpoint = self.endpoint || 'http://v0.api.upyun.com/' + self.configs.bucket;
-    var imageHost = self.host || 'http://' + self.configs.bucket + '.b0.upaiyun.com';
+    var policy = self.base64.encode(JSON.stringify(self.configs.params));
+    var apiendpoint = self.configs.endpoint || 'http://v0.api.upyun.com/' + self.configs.params.bucket;
+    var imageHost = self.configs.host || 'http://' + self.configs.params.bucket + '.b0.upaiyun.com';
 
     // by default, if not upload files by form,
     // file object will be parse as `params`
     if (!uploadByForm) data.append('file', params);
     data.append('policy', policy);
-    data.append('signature', md5hash(policy + '&' + self.form_api_secret));
+    data.append('signature', md5hash(policy + '&' + self.configs.form_api_secret));
 
     // open request
     req.open('POST', apiendpoint, true);
@@ -115,5 +113,32 @@
     // ui trigger
     if (NProgressExist) NProgress.start();
   };
+
+  function UpyunProvider(defautConfigs) {
+    var self = this;
+    this.configs = defautConfigs;
+    this.config = function(configs) {
+      if (!configs || !angular.isObject(configs))
+        return;
+      angular.forEach(configs, function(v, k) {
+        self.configs[k] = v;
+      });
+      return this.configs;
+    };
+    this.$get = ['$base64', 'md5', function(base64, md5){
+      return new Upyun(base64, md5, self);
+    }];
+  }
+
+  function initDefaultConfigs() {
+    return {
+      form_api_secret: '',
+      params: {
+        expiration: (new Date().getTime()) + 60,
+        'save-key': '/{year}/{mon}/{day}/upload_{filemd5}{.suffix}';
+        'allow-file-type': 'jpg,jpeg,gif,png'
+      }
+    };
+  }
 
 })(window, window.angular, window.NProgress);

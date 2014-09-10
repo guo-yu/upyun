@@ -31,6 +31,16 @@ javascript parts:
 ```javascript
 var app = angular.module('myApp',['upyun']);
 
+// configs $upyun
+app.config(['upyunProvider',function(upyunProvider) {
+  upyunProvider.config({
+    form_api_secret: 'my_form_api_secret',
+    params: {
+      bucket: 'mybucket'
+    }
+  });
+}])
+
 // bind from form
 // required params must be defined in the form
 app.controller('upload', function($scope, $upyun) {
