@@ -1,6 +1,7 @@
 ;(function(window, angular, NProgress) {
   'use strict';
   var NProgressExist = NProgress && NProgress.start && NProgress.done;
+  var toplevelList = ['signature', 'form_api_secret', 'endpoint', 'host'];
 
   // Inject as a angular module
   if (angular) {
@@ -22,9 +23,8 @@
   }
 
   Upyun.prototype.set = function(k, v) {
-    var toplevel = ['form_api_secret', 'endpoint', 'host'];
     if (k && v) {
-      if (toplevel.indexOf(k) > -1)
+      if (toplevelList.indexOf(k) > -1)
         this.configs[k] = v;
       else
         this.configs.params[k] = v;
@@ -64,7 +64,7 @@
       new FormData(document.forms.namedItem(params)) :
       new FormData();
 
-    var policy = self.base64.encode(JSON.stringify(self.configs.params));
+    var policy = self.configs.policy || self.base64.encode(JSON.stringify(self.configs.params));
     var apiendpoint = self.configs.endpoint || 'http://v0.api.upyun.com/' + self.configs.params.bucket;
     var imageHost = self.configs.host || 'http://' + self.configs.params.bucket + '.b0.upaiyun.com';
 
@@ -72,7 +72,7 @@
     // file object will be parse as `params`
     if (!uploadByForm) data.append('file', params);
     data.append('policy', policy);
-    data.append('signature', md5hash(policy + '&' + self.configs.form_api_secret));
+    data.append('signature', self.configs.signature || md5hash(policy + '&' + self.configs.form_api_secret));
 
     // open request
     req.open('POST', apiendpoint, true);
@@ -120,9 +120,8 @@
     this.config = function(configs) {
       if (!configs || !angular.isObject(configs))
         return;
-      var toplevel = ['form_api_secret', 'endpoint', 'host'];
       angular.forEach(configs, function(v, k) {
-        if (toplevel.indexOf(k) > -1) 
+        if (toplevelList.indexOf(k) > -1) 
           self.configs[k] = v;
         else
           self.configs.params[k] = v;
