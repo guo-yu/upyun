@@ -1,7 +1,7 @@
 ;(function(window, angular, NProgress) {
   'use strict';
   var NProgressExist = NProgress && NProgress.start && NProgress.done;
-  var toplevelList = ['signature', 'form_api_secret', 'endpoint', 'host'];
+  var toplevelList = ['signature', 'policy', 'form_api_secret', 'endpoint', 'host'];
 
   // Inject as a angular module
   if (angular) {
