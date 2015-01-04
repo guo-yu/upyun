@@ -1,5 +1,6 @@
 ;(function(window, angular, NProgress) {
   'use strict';
+
   var NProgressExist = NProgress && NProgress.start && NProgress.done;
   var toplevelList = ['signature', 'policy', 'form_api_secret', 'endpoint', 'host'];
 
@@ -29,37 +30,39 @@
       else
         this.configs.params[k] = v;
     }
+    
     return this;
   };
 
   Upyun.prototype.on = function(event, callback) {
     if (event && callback)
       this.events[event] = callback;
+
     return this;
   };
 
   Upyun.prototype.upload = function(params, callback) {
     // Check dependencies when `upload` method are trigged.
     if (!this.base64) 
-      throw new Error('base64 required.');
+      throw new Error('lib Base64 is required.');
     if (!this.md5) 
-      throw new Error('md5 required.');
+      throw new Error('lib MD5 is required.');
     if (!window.JSON) 
-      throw new Error('JSON required.');
+      throw new Error('JSON is required.');
     if (!window.FormData) 
-      throw new Error('FormData required.');
+      throw new Error('FormData is required.');
     if (!window.XMLHttpRequest) 
-      throw new Error('XMLHttpRequest required.');
+      throw new Error('XMLHttpRequest is required.');
     if (!callback || typeof(callback) !== 'function') 
-      throw new Error('callback function required.');
+      throw new Error('Callback function is required.');
 
     var self = this;
     var req = new XMLHttpRequest();
     var uploadByForm = typeof(params) === 'string';
     var md5hash = self.md5.createHash || self.md5;
 
-    // if upload by form name,
-    // all params must be input's value.
+    // If upload by form name,
+    // All params must be input's value.
     var data = uploadByForm ?
       new FormData(document.forms.namedItem(params)) :
       new FormData();
@@ -68,13 +71,16 @@
     var apiendpoint = self.configs.endpoint || 'http://v0.api.upyun.com/' + self.configs.params.bucket;
     var imageHost = self.configs.host || 'http://' + self.configs.params.bucket + '.b0.upaiyun.com';
 
-    // by default, if not upload files by form,
-    // file object will be parse as `params`
-    if (!uploadByForm) data.append('file', params);
+    // By default, if not upload files by form,
+    // File object will be parse as `params`
+    if (!uploadByForm) 
+      data.append('file', params);
+
+    // Append `policy` and create `signature`
     data.append('policy', policy);
     data.append('signature', self.configs.signature || md5hash(policy + '&' + self.configs.form_api_secret));
 
-    // open request
+    // Open a request
     req.open('POST', apiendpoint, true);
 
     // Error event
@@ -82,13 +88,15 @@
       return callback(err);
     }, false);
 
-    // when server response
+    // When server response
     req.addEventListener('load', function(result) {
       if (NProgressExist) NProgress.done();
       var statusCode = result.target.status;
-      // trying to parse JSON
+
+      // Try to parse JSON
       if (statusCode !== 200)
         return callback(new Error(result.target.status), result.target);
+
       try {
         var image = JSON.parse(this.responseText);
         image.absUrl = imageHost + image.url;
@@ -99,7 +107,7 @@
       }
     }, false);
 
-    // the upload progress monitor
+    // Upload progress monitor
     req.upload.addEventListener('progress', function(pe) {
       if (!pe.lengthComputable) return;
       if (!self.events.uploading || typeof(self.events.uploading) !== 'function')
@@ -107,11 +115,12 @@
       self.events.uploading(Math.round(pe.loaded / pe.total * 100));
     });
 
-    // send data to server 
+    // Send data to server 
     req.send(data);
 
-    // ui trigger
-    if (NProgressExist) NProgress.start();
+    // UI trigger
+    if (NProgressExist) 
+      NProgress.start();
   };
 
   function UpyunProvider(defautConfigs) {
