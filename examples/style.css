@@ -14,7 +14,7 @@ html {
 }
 
 .wrapper {
-  background: #fff url(https://www.upyun.com/images/upyun_logo.png) no-repeat center 20px;
+  background: #fff;
   width: 500px;
   margin-left: auto;
   margin-right: auto;
@@ -23,7 +23,6 @@ html {
   border: 1px solid #ddd;
   border-radius: 3px;
   padding: 20px;
-  padding-top: 60px;
 }
 
 h2 {
@@ -31,8 +30,6 @@ h2 {
   margin-bottom: 20px;
   padding-bottom: 10px;
   border-bottom: 1px solid #ddd;
-  border-top: 1px solid #ddd;
-  padding-top: 10px;
 }
 
 h2 span {
