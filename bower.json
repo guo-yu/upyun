@@ -24,8 +24,6 @@
   ],
   "dependencies": {
     "angular": "*",
-    "angular-base64": "~2.0.2",
-    "angular-md5": "~0.1.7",
     "js-base64": "2.1.5",
     "js-md5": "1.1.0"
   }

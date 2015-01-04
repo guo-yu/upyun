@@ -4,23 +4,22 @@
   var NProgressExist = NProgress && NProgress.start && NProgress.done;
   var toplevelList = ['signature', 'policy', 'form_api_secret', 'endpoint', 'host'];
 
-  // Inject as a angular module
+  // Inject as a Angular module
   if (angular) {
     angular
-      .module('upyun', ['base64','angular-md5'])
+      .module('upyun', [])
       .constant('UPYUN_CONFIGS', initDefaultConfigs())
       .provider('upyun', ['UPYUN_CONFIGS', UpyunProvider]);
   } else {
     // Inject to window object
-    window.upyun = new Upyun(window.Base64, window.md5);
+    window.upyun = new Upyun();
   }
 
-  function Upyun(base64, md5, self) {
-    var isAngularModule = self && self.configs;
-    this.base64 = base64;
-    this.md5 = md5;
+  function Upyun(self) {
     this.events = {};
-    this.configs = isAngularModule ? self.configs : initDefaultConfigs();
+    this.configs = (self && self.configs) ? 
+      self.configs : 
+      initDefaultConfigs();
   }
 
   Upyun.prototype.set = function(k, v) {
@@ -30,7 +29,7 @@
       else
         this.configs.params[k] = v;
     }
-    
+
     return this;
   };
 
@@ -43,10 +42,6 @@
 
   Upyun.prototype.upload = function(params, callback) {
     // Check dependencies when `upload` method are trigged.
-    if (!this.base64) 
-      throw new Error('lib Base64 is required.');
-    if (!this.md5) 
-      throw new Error('lib MD5 is required.');
     if (!window.JSON) 
       throw new Error('JSON is required.');
     if (!window.FormData) 
@@ -59,7 +54,6 @@
     var self = this;
     var req = new XMLHttpRequest();
     var uploadByForm = typeof(params) === 'string';
-    var md5hash = self.md5.createHash || self.md5;
 
     // If upload by form name,
     // All params must be input's value.
@@ -67,7 +61,12 @@
       new FormData(document.forms.namedItem(params)) :
       new FormData();
 
-    var policy = self.configs.policy || self.base64.encode(JSON.stringify(self.configs.params));
+    if (!self.configs.policy && !window.Base64)
+      throw new Error('lib Base64 is required');
+    if (!self.configs.signature && !window.md5)
+      throw new Error('lib Md5 is required');
+
+    var policy = self.configs.policy || window.Base64.encode(JSON.stringify(self.configs.params));
     var apiendpoint = self.configs.endpoint || 'http://v0.api.upyun.com/' + self.configs.params.bucket;
     var imageHost = self.configs.host || 'http://' + self.configs.params.bucket + '.b0.upaiyun.com';
 
@@ -78,7 +77,7 @@
 
     // Append `policy` and create `signature`
     data.append('policy', policy);
-    data.append('signature', self.configs.signature || md5hash(policy + '&' + self.configs.form_api_secret));
+    data.append('signature', self.configs.signature || window.md5(policy + '&' + self.configs.form_api_secret));
 
     // Open a request
     req.open('POST', apiendpoint, true);
@@ -125,20 +124,24 @@
 
   function UpyunProvider(defautConfigs) {
     var self = this;
+
     this.configs = defautConfigs;
     this.config = function(configs) {
       if (!configs || !angular.isObject(configs))
         return;
+
       angular.forEach(configs, function(v, k) {
         if (toplevelList.indexOf(k) > -1) 
           self.configs[k] = v;
         else
           self.configs.params[k] = v;
       });
+
       return this.configs;
     };
-    this.$get = ['$base64', 'md5', function(base64, md5){
-      return new Upyun(base64, md5, self);
+
+    this.$get = [function(){
+      return new Upyun(self);
     }];
   }
 
